@@ -1,4 +1,5 @@
 using BDshka.Models;
+using BDshka.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
@@ -22,16 +23,35 @@ namespace BDshka.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public IActionResult Autorization(SecurityModel auto)
+        {
+            if (db.Find(auto.Log_in, auto.Pass_word))
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return RedirectToAction("Autorization");
+            }
+        }
+
         public async Task<IActionResult> Index()
         {
             return View(await db.Clients.ToListAsync());
         }
-        public IActionResult Create()
+        public IActionResult Registration()
         {
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Create(ClientsModel client)
+        public async Task<IActionResult> Registration(SecurityModel client)
+        {
+            db.Secur.Add(client);
+            await db.SaveChangesAsync();
+            return RedirectToAction("PostRegistration");
+        }
+        public async Task<IActionResult> PostRegistration(ClientsModel client)
         {
             db.Clients.Add(client);
             await db.SaveChangesAsync();

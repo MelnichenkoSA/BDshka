@@ -1,9 +1,9 @@
 ﻿@model BDshka.Models.ClientsModel
 
-<h2>Добавление пользователя</h2>
-<form asp-action="create" asp-controller="home">
+<h2>Регистрация</h2>
+<form asp-action="postregistration" asp-controller="home">
     <p>
-        <label asp-for="ID_Client">ID</label><br />
+        <label asp-for="ID_Client">ID(убрать)</label><br />
         <input type="number" asp-for="ID_Client" />
     </p>
     <p>
@@ -16,7 +16,7 @@
     </p>
     <p>
         <label asp-for="ID_Role">Роль</label><br />
-        <input type="number" asp-for="ID_Role"/>
+        <input type="number" asp-for="ID_Role" />
     </p>
     <p>
         <input type="submit" value="Отправить" />
