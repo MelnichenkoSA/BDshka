@@ -13,7 +13,7 @@ builder.Services.AddDbContext<BDContext>(options => options.UseSqlServer(connect
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
-app.MapGet("/", (BDContext db) => db.Clients.ToList());
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

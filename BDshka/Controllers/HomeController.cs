@@ -1,21 +1,41 @@
 using BDshka.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 
 namespace BDshka.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        //private readonly ILogger<HomeController> _logger;
+        //
+        //public HomeController(ILogger<HomeController> logger)
+        //{
+        //    _logger = logger;
+        //}
+        BDContext db;
+        public HomeController(BDContext context)
         {
-            _logger = logger;
+            db = context;
         }
-
-        public IActionResult Index()
+        public IActionResult Autorization()
         {
             return View();
+        }
+        public async Task<IActionResult> Index()
+        {
+            return View(await db.Clients.ToListAsync());
+        }
+        public IActionResult Create()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Create(ClientsModel client)
+        {
+            db.Clients.Add(client);
+            await db.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
 
         public IActionResult Privacy()
@@ -28,5 +48,6 @@ namespace BDshka.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
     }
 }
