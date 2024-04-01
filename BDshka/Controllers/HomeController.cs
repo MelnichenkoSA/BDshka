@@ -26,6 +26,7 @@ namespace BDshka.Controllers
         [HttpPost]
         public IActionResult Autorization(SecurityModel auto)
         {
+            auto.Pass_word = auto.Code(auto.Log_in + auto.Pass_word);
             if (db.Find(auto.Log_in, auto.Pass_word))
             {
                 return RedirectToAction("Index");
@@ -45,12 +46,18 @@ namespace BDshka.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Registration(SecurityModel client)
+        public async Task<IActionResult> Registration(SecurityModel sec)
         {
-            db.Secur.Add(client);
+            sec.Pass_word = sec.Code(sec.Log_in + sec.Pass_word);
+            db.Secur.Add(sec);
             await db.SaveChangesAsync();
             return RedirectToAction("PostRegistration");
         }
+        public IActionResult PostRegistration()
+        {
+            return View();
+        }
+        [HttpPost]
         public async Task<IActionResult> PostRegistration(ClientsModel client)
         {
             db.Clients.Add(client);
