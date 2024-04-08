@@ -3,6 +3,8 @@ using BDshka.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace BDshka.Controllers
 {
@@ -18,6 +20,7 @@ namespace BDshka.Controllers
         public HomeController(BDContext context)
         {
             db = context;
+            
         }
         public IActionResult Autorization()
         {
@@ -26,7 +29,11 @@ namespace BDshka.Controllers
         [HttpPost]
         public IActionResult Autorization(SecurityModel auto)
         {
-            auto.Pass_word = auto.Code(auto.Log_in + auto.Pass_word);
+            SHA256 MD5Hash = SHA256.Create();
+            byte[] inputBytes = Encoding.ASCII.GetBytes(auto.Log_in + auto.Pass_word);
+            byte[] hash = MD5Hash.ComputeHash(inputBytes);
+            auto.Pass_word = Convert.ToHexString(hash);
+
             if (db.Find(auto.Log_in, auto.Pass_word))
             {
                 return RedirectToAction("Index");
@@ -48,7 +55,10 @@ namespace BDshka.Controllers
         [HttpPost]
         public async Task<IActionResult> Registration(SecurityModel sec)
         {
-            sec.Pass_word = sec.Code(sec.Log_in + sec.Pass_word);
+            SHA256 MD5Hash = SHA256.Create();
+            byte[] inputBytes = Encoding.ASCII.GetBytes(sec.Log_in + sec.Pass_word);
+            byte[] hash = MD5Hash.ComputeHash(inputBytes);
+            sec.Pass_word = Convert.ToHexString(hash);
             db.Secur.Add(sec);
             await db.SaveChangesAsync();
             return RedirectToAction("PostRegistration");
