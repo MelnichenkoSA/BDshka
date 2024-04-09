@@ -18,6 +18,7 @@ namespace BDshka.Models
         public DbSet<SpecModel> Spec { get; set; }
         public DbSet<StatModel> Stat { get; set; }  
         public DbSet<WorkersModel> Workers { get; set; }
+        public Dbset<Worker_of_RemontModel> Worker_of_Remont { get; set; }
         public BDContext(DbContextOptions<BDContext> options): base(options)
         {
             Database.EnsureCreated();
