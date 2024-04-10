@@ -1,16 +1,16 @@
-﻿@model IEnumerable<BDshka.Models.ClientsModel>
+﻿@model IEnumerable<BDshka.Models.RemontsModel>
 
 <h2>Список пользователей</h2>
-<p><a asp-action="Registration">Добавить пользователя</a></p>
+<p><a asp-action="Registration">Добавить услугу</a></p>
 <table class="table">
-    <tr><th>ID</th><th>Имя</th><th>Телефон</th><th>Роль</th></tr>
+    <tr><th>ID</th><th>Название</th><th>Стоимость</th><th>Специальность</th></tr>
     @foreach (var item in Model)
     {
         <tr>
-            <td>@item.ID_Client</td>
-            <td>@item.FIO</td>
-            <td>@item.Phone_Number</td>
-            <td>@item.ID_Role</td>
+            <td>@item.ID_Remont</td>
+            <td>@item.Title</td>
+            <td>@item.Cost</td>
+            <td>@item.ID_Spec</td>
         </tr>
     }
 </table>

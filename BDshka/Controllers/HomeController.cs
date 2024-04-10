@@ -48,6 +48,14 @@ namespace BDshka.Controllers
         {
             return View(await db.Clients.ToListAsync());
         }
+        public async Task<IActionResult> Remont()
+        {
+            return View(await db.Remonts.ToListAsync());
+        }
+        public async Task<IActionResult> Worker()
+        {
+            return View(await db.Workers.ToListAsync());
+        }
         public IActionResult Registration()
         {
             return View();
