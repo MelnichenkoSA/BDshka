@@ -6,8 +6,11 @@ namespace BDshka.Models
     {
         [Key]
         public int ID_Client { get; set; }
+        [Required(ErrorMessage = "Не указан ФИО")]
         public string FIO { get; set; }
-        public int Phone_Number { get; set; }
+        [Required(ErrorMessage = "Не указан Номер")]
+        public string Phone_Number { get; set; }
+        [Required(ErrorMessage = "Не указана Роль (А нужна ли она?)")]
         public int ID_Role { get; set; }
 
         //public ClientsModel(string name, int phone)
