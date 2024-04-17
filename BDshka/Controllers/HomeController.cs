@@ -5,6 +5,7 @@ using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BDshka.Controllers
 {
@@ -22,7 +23,7 @@ namespace BDshka.Controllers
             db = context;
             
         }
-        public IActionResult Autorization()
+        /*public IActionResult Autorization()
         {
             return View();
         }
@@ -42,8 +43,8 @@ namespace BDshka.Controllers
             {
                 return RedirectToAction("Autorization");
             }
-        }
-
+        }*/
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             return View(await db.Clients.ToListAsync());
@@ -56,7 +57,7 @@ namespace BDshka.Controllers
         {
             return View(await db.Workers.ToListAsync());
         }
-        public IActionResult Registration()
+        /*public IActionResult Registration()
         {
             return View();
         }
@@ -81,7 +82,7 @@ namespace BDshka.Controllers
             db.Clients.Add(client);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
-        }
+        }*/
 
         public IActionResult Privacy()
         {

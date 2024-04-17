@@ -13,7 +13,7 @@ builder.Services.AddDbContext<BDContext>(options => options.UseSqlServer(connect
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options => //CookieAuthenticationOptions
     {
-        options.LoginPath = new PathString("/Account/Login");
+        options.LoginPath = new PathString("/Account/Autorization");
     });
 builder.Services.AddControllersWithViews();
 // Add services to the container.
@@ -39,6 +39,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Autorization}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
