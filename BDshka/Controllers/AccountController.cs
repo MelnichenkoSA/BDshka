@@ -101,7 +101,7 @@ namespace BDshka.Controllers
         public IActionResult CheckEmail(string login)
         {
             if (db.Find(login))
-                return Json(true);
+                return Json(false);
             return Json(false);
         }
 
