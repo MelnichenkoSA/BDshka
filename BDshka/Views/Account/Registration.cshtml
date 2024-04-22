@@ -9,10 +9,12 @@
     <p>
         <label asp-for="Log_in">Логин</label><br />
         <input type="text" asp-for="Log_in" />
+        <span asp-validation-for="Log_in"></span>
     </p>
     <p>
         <label asp-for="Pass_word">Пароль</label><br />
         <input type="text" asp-for="Pass_word" />
+        <span asp-validation-for="Pass_word"></span>
     </p>
     <p>
         <input type="submit" value="Отправить" />

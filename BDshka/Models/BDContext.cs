@@ -24,13 +24,14 @@ namespace BDshka.Models
             Database.EnsureCreated();
         }
 
-        public bool Find(string login, string password)
+        public bool Find(string login)
         {
             foreach (var item in Secur) 
             {
-                if (item.Log_in == login && item.Pass_word == password) { return true; }
+                if (item.Log_in == login ) { return true; }
             }
             return false;
         }
+
     }
 }

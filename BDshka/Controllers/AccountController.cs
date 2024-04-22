@@ -97,6 +97,14 @@ namespace BDshka.Controllers
             return View(model); ;
         }
 
+        [AcceptVerbs("Get", "Post")]
+        public IActionResult CheckEmail(string login)
+        {
+            if (db.Find(login))
+                return Json(true);
+            return Json(false);
+        }
+
         private async Task Authenticate(string userName)
         {
             // создаем один claim
