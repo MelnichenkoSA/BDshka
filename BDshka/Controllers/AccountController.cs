@@ -63,8 +63,12 @@ namespace BDshka.Controllers
                 SecurityModel sec = await db.Secur.FirstOrDefaultAsync(u => u.ID_Client == model.ID_Client && u.Log_in == model.Log_in && u.Pass_word == model.Pass_word);
                 if (sec == null)
                 {
+                    var item = new  SecurityModel();
+                    item.Log_in = model.Log_in;
+                    item.ID_Client = model.ID_Client;
+                    item.Pass_word = model.Pass_word;
                     // добавляем пользователя в бд
-                    db.Secur.Add(new SecurityModel { ID_Client = model.ID_Client, Log_in = model.Log_in, Pass_word = model.Pass_word });
+                    db.Secur.Add(item);
                     await db.SaveChangesAsync();
 
                     await Authenticate(model.Log_in); // аутентификация
@@ -74,7 +78,7 @@ namespace BDshka.Controllers
                 else
                     ModelState.AddModelError("", "Некорректные логин и(или) пароль");
             }
-            return View(model); ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;
+            return View(model); 
         }
         public async Task<IActionResult> PostRegistration(ClientsModel model)
         {
@@ -102,7 +106,7 @@ namespace BDshka.Controllers
         {
             if (db.Find(login))
                 return Json(false);
-            return Json(false);
+            return Json(true);
         }
 
         private async Task Authenticate(string userName)

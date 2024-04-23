@@ -1,7 +1,9 @@
 ﻿@model BDshka.Models.SecurityModel
 
 <h2>Регистрация</h2>
-<form asp-action="registration" asp-controller="account">
+<form asp-antiforgery="true" asp-action="registration" asp-controller="account">
+    <div>
+        <div class="validation" asp-validation-summary="ModelOnly"></div>
     <p>
         <label asp-for="ID_Client">ID(Убрать)</label><br />
         <input type="number" asp-for="ID_Client" />
@@ -19,4 +21,10 @@
     <p>
         <input type="submit" value="Отправить" />
     </p>
+    </div>
 </form>
+@section scripts{
+
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
