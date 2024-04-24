@@ -1,17 +1,15 @@
 ﻿using BDshka.Models;
-using System.Diagnostics.Contracts;
 
 namespace BDshka.ViewModels
 {
-    public class Registration
+    public class Autorization
     {
         public SecurityModel Security = new SecurityModel();
         public string Login;
         public string Password;
-        public Registration(SecurityModel security) 
+        public Autorization(SecurityModel security)
         {
             Security = security;
         }
-
     }
 }

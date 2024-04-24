@@ -53,6 +53,7 @@ namespace BDshka.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Registration(SecurityModel model)
         {
+
             SHA256 Hash = SHA256.Create();
             byte[] inputBytes = Encoding.ASCII.GetBytes(model.Log_in + model.Pass_word);
             byte[] hash = Hash.ComputeHash(inputBytes);
