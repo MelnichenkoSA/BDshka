@@ -59,8 +59,8 @@ namespace BDshka.Controllers
             byte[] hash = Hash.ComputeHash(inputBytes);
             model.Pass_word = Convert.ToHexString(hash);
 
-            if (ModelState.IsValid)
-            {
+            if (ModelState.IsValid && !db.Find(model.Log_in))
+            { 
                 SecurityModel sec = await db.Secur.FirstOrDefaultAsync(u => u.ID_Client == model.ID_Client && u.Log_in == model.Log_in && u.Pass_word == model.Pass_word);
                 if (sec == null)
                 {
@@ -79,6 +79,7 @@ namespace BDshka.Controllers
                 else
                     ModelState.AddModelError("", "Некорректные логин и(или) пароль");
             }
+            ModelState.AddModelError("", "Такой Пользователь уже зарегистрирован");
             return View(model); 
         }
         public async Task<IActionResult> PostRegistration(ClientsModel model)
