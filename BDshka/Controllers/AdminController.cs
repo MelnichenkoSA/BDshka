@@ -16,10 +16,12 @@ namespace BDshka.Controllers
         public IActionResult AddWorker()
         {
             db.Workers.Add();
+            return RedirectToAction(Index,Home);
         }
         public IActionResult AddRemont()
         {
             db.Remonts.Add();
+            return RedirectToAction(Index,Home);
         }
     }
 }
