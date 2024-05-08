@@ -13,5 +13,13 @@ namespace BDshka.Controllers
             db.Clients.remove();
             return RedirectToAction(Index,Home);
         }
+        public IActionResult AddWorker()
+        {
+            db.Workers.Add();
+        }
+        public IActionResult AddRemont()
+        {
+            db.Remonts.Add();
+        }
     }
 }
