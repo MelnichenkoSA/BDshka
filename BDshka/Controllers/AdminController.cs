@@ -8,5 +8,10 @@ namespace BDshka.Controllers
         {
             return View();
         }
+        public IActionResult Delete()
+        {
+            db.Clients.remove();
+            return RedirectToAction(Index,Home);
+        }
     }
 }
