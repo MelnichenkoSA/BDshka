@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<BDshka.Models.WorkersModel>
 
 <h2>Список пользователей</h2>
-<p><a asp-action="Registration">Добавить Работника</a></p>
+<p><a asp-action="AddWorker" asp-controller="admin">Добавить Работника</a></p>
 <table class="table">
     <tr><th>ID</th><th>Имя</th><th>Оклад</th></tr>
     @foreach (var item in Model)

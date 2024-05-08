@@ -1,5 +1,30 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@model BDshka.Models.WorkersModel
+
+<h2>Добавление Работника</h2>
+<form asp-antiforgery="true" asp-action="AddWorker" asp-controller="admin">
+    <div>
+        <div class="validation" asp-validation-summary="ModelOnly"></div>
+        <p>
+            <label asp-for="ID_Worker">ID(Убрать)</label><br />
+            <input type="number" asp-for="ID_Worker" />
+        </p>
+        <p>
+            <label asp-for="FIO">Логин</label><br />
+            <input type="text" asp-for="FIO" />
+            <span asp-validation-for="FIO"></span>
+        </p>
+        <p>
+            <label asp-for="Oklad">Пароль</label><br />
+            <input type="text" asp-for="Oklad" />
+            <span asp-validation-for="Oklad"></span>
+        </p>
+        <p>
+            <input type="submit" value="Отправить" />
+        </p>
+    </div>
+</form>
+@section scripts{
+
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 }

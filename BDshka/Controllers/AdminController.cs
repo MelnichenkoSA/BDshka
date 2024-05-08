@@ -1,27 +1,47 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using BDshka.Models;
+using BDshka.ViewModels;
+using System.Reflection.Metadata.Ecma335;
 
 namespace BDshka.Controllers
 {
     public class AdminController : Controller
     {
-        public IActionResult Index()
+        private BDContext db;
+        public AdminController(BDContext context)
+        {
+            db = context;
+        }
+        public IActionResult AddWorker()
+        {
+            return View();
+        }
+        public IActionResult AddRemont()
         {
             return View();
         }
         public IActionResult Delete()
         {
-            db.Clients.remove();
-            return RedirectToAction(Index,Home);
+            return View();
         }
-        public IActionResult AddWorker()
+        [HttpDelete]
+        public IActionResult Delete(DeleteModel model)
         {
-            db.Workers.Add();
-            return RedirectToAction(Index,Home);
+            db.Clients.Remove(model.Client);
+            db.Secur.Remove(model.Security);
+            return RedirectToAction("Index","Home");
         }
-        public IActionResult AddRemont()
+        [HttpPost]
+        public IActionResult AddWorker(WorkersModel model)
         {
-            db.Remonts.Add();
-            return RedirectToAction(Index,Home);
+            db.Workers.Add(model);
+            return RedirectToAction("Workers", "Home");
+        }
+        [HttpPost]
+        public IActionResult AddRemont(RemontsModel model)
+        {
+            db.Remonts.Add(model);
+            return RedirectToAction("Remonts", "Home");
         }
     }
 }
