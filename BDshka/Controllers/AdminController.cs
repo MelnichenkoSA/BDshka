@@ -2,6 +2,8 @@
 using BDshka.Models;
 using BDshka.ViewModels;
 using System.Reflection.Metadata.Ecma335;
+using Microsoft.EntityFrameworkCore;
+using System.Text;
 
 namespace BDshka.Controllers
 {
@@ -32,16 +34,55 @@ namespace BDshka.Controllers
             return RedirectToAction("Index","Home");
         }
         [HttpPost]
-        public IActionResult AddWorker(WorkersModel model)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddWorker(WorkersModel model)
         {
-            db.Workers.Add(model);
-            return RedirectToAction("Workers", "Home");
+
+            if (ModelState.IsValid)
+            {
+                WorkersModel sec = await db.Workers.FirstOrDefaultAsync(u => u.ID_Worker == model.ID_Worker && u.FIO == model.FIO && u.Oklad == model.Oklad);
+                if (sec == null)
+                {
+                    var item = new WorkersModel();
+                    item.ID_Worker = model.ID_Worker;
+                    item.FIO = model.FIO;
+                    item.Oklad = model.Oklad;
+                    db.Workers.Add(item);
+                    await db.SaveChangesAsync();
+
+                    return RedirectToAction("Workers", "Home");
+                }
+                else
+                    ModelState.AddModelError("", "Некорректные логин и(или) пароль");
+            }
+            return View(model);
         }
+
         [HttpPost]
-        public IActionResult AddRemont(RemontsModel model)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddRemont(RemontsModel model)
         {
-            db.Remonts.Add(model);
-            return RedirectToAction("Remonts", "Home");
+
+            if (ModelState.IsValid)
+            {
+                RemontsModel sec = await db.Remonts.FirstOrDefaultAsync(u => u.ID_Remont == model.ID_Remont && u.Title == model.Title && u.ID_Spec == model.ID_Spec && u.Cost == model.Cost);
+                if (sec == null)
+                {
+                    var item = new RemontsModel();
+                    item.ID_Remont = model.ID_Remont;
+                    item.Title = model.Title;
+                    item.Cost = model.Cost;
+                    item.ID_Spec = model.ID_Spec;
+                    // добавляем пользователя в бд
+                    db.Remonts.Add(item);
+                    await db.SaveChangesAsync();
+
+                    return RedirectToAction("Remonts", "Home");
+                }
+                else
+                    ModelState.AddModelError("", "Некорректные логин и(или) пароль");
+            }
+            return View(model);
         }
     }
 }

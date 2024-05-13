@@ -12,6 +12,14 @@
             <td>@item.FIO</td>
             <td>@item.Phone_Number</td>
             <td>@item.ID_Role</td>
+            <td>
+                <a asp-action="Edit" asp-controller="account" asp-route-id="@item.ID_Client">Изменить</a>
+            </td>
+            <td>
+                <form asp-controller="account" asp-action="Delete" method="post" asp-route-id="@item.ID_Client">
+                    <input type="submit" value="Удалить" />
+                </form>
+            </td>
         </tr>
     }
 </table>

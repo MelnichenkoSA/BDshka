@@ -37,7 +37,7 @@ namespace BDshka.Controllers
                 if (sec != null)
                 {
                     await Authenticate(model.Log_in); // аутентификация
-
+                    
                     return RedirectToAction("Index", "Home");
                 }
                 ModelState.AddModelError("", "Некорректные логин и(или) пароль");
@@ -101,6 +101,40 @@ namespace BDshka.Controllers
                     ModelState.AddModelError("", "Некорректные логин и(или) пароль");
             }
             return View(model); ;
+        }
+        [HttpPost]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id != null)
+            {
+                ClientsModel? user = await db.Clients.FirstOrDefaultAsync(p => p.ID_Client == id);
+                SecurityModel sec = await db.Secur.FirstOrDefaultAsync(p => p.ID_Client == id);
+                if (user != null)
+                {
+                    db.Secur.Remove(sec);
+                    db.Clients.Remove(user);
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("Index","Home");
+                }
+            }
+            return NotFound();
+        }
+        [HttpGet]
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id != null)
+            {
+                ClientsModel? user = await db.Clients.FirstOrDefaultAsync(p => p.ID_Client == id);
+                if (user != null) return View(user);
+            }
+            return NotFound();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Edit(ClientsModel user)
+        {
+            db.Clients.Update(user);
+            await db.SaveChangesAsync();
+            return RedirectToAction("Index","Home");
         }
 
         [AcceptVerbs("Get", "Post")]
