@@ -3,10 +3,6 @@
 <h2>Регистрация</h2>
 <form asp-action="postregistration" asp-controller="account">
     <p>
-        <label asp-for="ID_Client">ID(убрать)</label><br />
-        <input type="number" asp-for="ID_Client" />
-    </p>
-    <p>
         <label asp-for="FIO">Имя</label><br />
         <input type="text" asp-for="FIO" />
         <span asp-validation-for="FIO"></span>
@@ -15,11 +11,6 @@
         <label asp-for="Phone_Number">Телефон</label><br />
         <input type="text" asp-for="Phone_Number" />
         <span asp-validation-for="Phone_Number"></span>
-    </p>
-    <p>
-        <label asp-for="ID_Role">Роль</label><br />
-        <input type="number" asp-for="ID_Role" />
-        <span asp-validation-for="ID_Role"></span>
     </p>
     <p>
         <input type="submit" value="Отправить" />

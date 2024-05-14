@@ -132,7 +132,11 @@ namespace BDshka.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(ClientsModel user)
         {
-            db.Clients.Update(user);
+            ClientsModel? userDB = await db.Clients.FirstOrDefaultAsync(p => p.ID_Client == user.ID_Client);
+            userDB.Phone_Number = user.Phone_Number;
+            userDB.FIO = user.FIO;
+
+            //db.Clients.Update(user);
             await db.SaveChangesAsync();
             return RedirectToAction("Index","Home");
         }
