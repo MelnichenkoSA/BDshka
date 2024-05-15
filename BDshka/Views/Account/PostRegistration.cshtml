@@ -3,6 +3,11 @@
 <h2>Регистрация</h2>
 <form asp-action="postregistration" asp-controller="account">
     <p>
+        <label asp-for="ID_Client">ID</label><br />
+        <input type="hidden" asp-for="ID_Client" />
+        <span asp-validation-for="ID_Client"></span>
+    </p>
+    <p>
         <label asp-for="FIO">Имя</label><br />
         <input type="text" asp-for="FIO" />
         <span asp-validation-for="FIO"></span>

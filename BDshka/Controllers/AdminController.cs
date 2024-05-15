@@ -30,7 +30,6 @@ namespace BDshka.Controllers
         public IActionResult Delete(DeleteModel model)
         {
             db.Clients.Remove(model.Client);
-            db.Secur.Remove(model.Security);
             return RedirectToAction("Index","Home");
         }
         [HttpPost]

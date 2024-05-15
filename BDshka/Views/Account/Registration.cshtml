@@ -1,4 +1,4 @@
-﻿@model BDshka.Models.SecurityModel
+﻿@model BDshka.Models.ClientsModel
 
 <h2>Регистрация</h2>
 <form asp-antiforgery="true" asp-action="registration" asp-controller="account">
@@ -14,6 +14,17 @@
         <input type="text" asp-for="Pass_word" />
         <span asp-validation-for="Pass_word"></span>
     </p>
+
+        <p>
+            <label asp-for="FIO">Имя</label><br />
+            <input type="text" asp-for="FIO" />
+            <span asp-validation-for="FIO"></span>
+        </p>
+        <p>
+            <label asp-for="Phone_Number">Телефон</label><br />
+            <input type="text" asp-for="Phone_Number" />
+            <span asp-validation-for="Phone_Number"></span>
+        </p>
     <p>
         <input type="submit" value="Отправить" />
     </p>

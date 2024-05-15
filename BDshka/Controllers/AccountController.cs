@@ -24,7 +24,7 @@ namespace BDshka.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Autorization(SecurityModel model)
+        public async Task<IActionResult> Autorization(ClientsModel model)
         {
             SHA256 Hash = SHA256.Create();
             byte[] inputBytes = Encoding.ASCII.GetBytes(model.Log_in + model.Pass_word);
@@ -33,7 +33,7 @@ namespace BDshka.Controllers
 
             if (ModelState.IsValid)
             {
-                SecurityModel sec = await db.Secur.FirstOrDefaultAsync(u => u.Log_in == model.Log_in && u.Pass_word == model.Pass_word);
+                ClientsModel sec = await db.Clients.FirstOrDefaultAsync(u => u.ID_Client == model.ID_Client && u.Log_in == model.Log_in && u.Pass_word == model.Pass_word && u.FIO == model.FIO && u.Phone_Number == model.Phone_Number && u.ID_Role == model.ID_Role);
                 if (sec != null)
                 {
                     await Authenticate(model.Log_in); // аутентификация
@@ -51,7 +51,7 @@ namespace BDshka.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Registration(SecurityModel model)
+        public async Task<IActionResult> Registration(ClientsModel model)
         {
 
             SHA256 Hash = SHA256.Create();
@@ -60,29 +60,25 @@ namespace BDshka.Controllers
             model.Pass_word = Convert.ToHexString(hash);
 
             if (ModelState.IsValid && !db.Find(model.Log_in))
-            { 
-                SecurityModel sec = await db.Secur.FirstOrDefaultAsync(u => u.ID_Client == model.ID_Client && u.Log_in == model.Log_in && u.Pass_word == model.Pass_word);
+            {
+                ClientsModel sec = await db.Clients.FirstOrDefaultAsync(u => u.ID_Client == model.ID_Client && u.Log_in == model.Log_in && u.Pass_word == model.Pass_word && u.FIO == model.FIO && u.Phone_Number == model.Phone_Number && u.ID_Role == model.ID_Role);
                 if (sec == null)
                 {
-                    var item = new  SecurityModel();
-                    item.Log_in = model.Log_in;
-                    item.ID_Client = model.ID_Client;
-                    item.Pass_word = model.Pass_word;
                     // добавляем пользователя в бд
-                    db.Secur.Add(item);
+                    db.Clients.Add(new ClientsModel { ID_Client = model.ID_Client, FIO = model.FIO, Phone_Number = model.Phone_Number, ID_Role = 1, Pass_word = model.Pass_word, Log_in = model.Log_in});
                     await db.SaveChangesAsync();
 
                     await Authenticate(model.Log_in); // аутентификация
 
-                    return RedirectToAction("PostRegistration");
+                    return RedirectToAction("Index", "Home");
                 }
                 else
                     ModelState.AddModelError("", "Некорректные логин и(или) пароль");
             }
-            ModelState.AddModelError("", "Такой Пользователь уже зарегистрирован");
+            ModelState.AddModelError("", "");
             return View(model); 
         }
-        public async Task<IActionResult> PostRegistration(ClientsModel model)
+        /*public async Task<IActionResult> PostRegistration(ClientsModel model)
         {
             if (ModelState.IsValid)
             {
@@ -90,7 +86,7 @@ namespace BDshka.Controllers
                 if (client == null)
                 {
                     // добавляем пользователя в бд
-                    db.Clients.Add(new ClientsModel { ID_Client = model.ID_Client, FIO = model.FIO, Phone_Number = model.Phone_Number, ID_Role = model.ID_Role });
+                    db.Clients.Add(new ClientsModel { ID_Client = model.ID_Client, FIO = model.FIO, Phone_Number = model.Phone_Number, ID_Role = 1 });
                     await db.SaveChangesAsync();
 
                     await Authenticate(model.Phone_Number); // аутентификация
@@ -101,17 +97,15 @@ namespace BDshka.Controllers
                     ModelState.AddModelError("", "Некорректные логин и(или) пароль");
             }
             return View(model); ;
-        }
+        }*/
         [HttpPost]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id != null)
             {
                 ClientsModel? user = await db.Clients.FirstOrDefaultAsync(p => p.ID_Client == id);
-                SecurityModel sec = await db.Secur.FirstOrDefaultAsync(p => p.ID_Client == id);
                 if (user != null)
                 {
-                    db.Secur.Remove(sec);
                     db.Clients.Remove(user);
                     await db.SaveChangesAsync();
                     return RedirectToAction("Index","Home");

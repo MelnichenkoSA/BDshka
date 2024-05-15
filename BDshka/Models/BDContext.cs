@@ -6,7 +6,6 @@ namespace BDshka.Models
     {
         public DbSet<RolesModel> Roles { get; set; }
         public DbSet<ClientsModel> Clients { get; set; }
-        public DbSet<SecurityModel> Secur { get; set; }
         public DbSet<Book_of_MaterialModel> Book_of_Material { get; set; }
         public DbSet<Category_of_MaterialModel> Category_of_Material { get; set; }
         public DbSet<Category_of_Remonts> Category_of_Remonts { get; set; }
@@ -26,7 +25,7 @@ namespace BDshka.Models
 
         public bool Find(string login)
         {
-            foreach (var item in Secur) 
+            foreach (var item in Clients) 
             {
                 if (item.Log_in == login ) { return true; }
             }
