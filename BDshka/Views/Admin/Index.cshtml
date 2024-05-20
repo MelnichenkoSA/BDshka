@@ -1,0 +1,25 @@
+﻿@model IEnumerable<BDshka.Models.ClientsModel>
+
+<h2>Список пользователей</h2>
+<p><a asp-action="Registration" asp-controller="account">Добавить пользователя</a></p>
+
+<table class="table">
+    <tr><th>ID</th><th>Имя</th><th>Телефон</th><th>Роль</th></tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.ID_Client</td>
+            <td>@item.FIO</td>
+            <td>@item.Phone_Number</td>
+            <td>@item.ID_Role</td>
+            <td>
+                <a asp-action="Edit" asp-controller="account" asp-route-id="@item.ID_Client">Изменить</a>
+            </td>
+            <td>
+                <form asp-controller="account" asp-action="Delete" method="post" asp-route-id="@item.ID_Client">
+                    <input type="submit" value="Удалить" />
+                </form>
+            </td>
+        </tr>
+    }
+</table>

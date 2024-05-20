@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Net.Sockets;
 using System.Text;
 using System.Security.Cryptography;
+using BDshka.ViewModels;
 
 namespace BDshka.Controllers
 {
@@ -24,21 +25,32 @@ namespace BDshka.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Autorization(ClientsModel model)
+        public async Task<IActionResult> Autorization(AutorizationModel model)
         {
-            SHA256 Hash = SHA256.Create();
-            byte[] inputBytes = Encoding.ASCII.GetBytes(model.Log_in + model.Pass_word);
-            byte[] hash = Hash.ComputeHash(inputBytes);
-            model.Pass_word = Convert.ToHexString(hash);
-
             if (ModelState.IsValid)
             {
-                ClientsModel sec = await db.Clients.FirstOrDefaultAsync(u => u.ID_Client == model.ID_Client && u.Log_in == model.Log_in && u.Pass_word == model.Pass_word && u.FIO == model.FIO && u.Phone_Number == model.Phone_Number && u.ID_Role == model.ID_Role);
+                SHA256 Hash = SHA256.Create();
+                byte[] inputBytes = Encoding.ASCII.GetBytes(model.Log_in + model.Pass_word);
+                byte[] hash = Hash.ComputeHash(inputBytes);
+                model.Pass_word = Convert.ToHexString(hash);
+
+                ClientsModel sec = await db.Clients.FirstOrDefaultAsync(u =>  u.Log_in == model.Log_in && u.Pass_word == model.Pass_word );
                 if (sec != null)
                 {
                     await Authenticate(model.Log_in); // аутентификация
-                    
-                    return RedirectToAction("Index", "Home");
+                    if(sec.ID_Role == 1)
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
+                    if (sec.ID_Role == 2)
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
+                    if (sec.ID_Role == 3)
+                    {
+                        return RedirectToAction("Index", "Admin");
+                    }
+
                 }
                 ModelState.AddModelError("", "Некорректные логин и(или) пароль");
             }

@@ -4,6 +4,7 @@ using BDshka.ViewModels;
 using System.Reflection.Metadata.Ecma335;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BDshka.Controllers
 {
@@ -13,6 +14,21 @@ namespace BDshka.Controllers
         public AdminController(BDContext context)
         {
             db = context;
+        }
+        [Authorize]
+        public async Task<IActionResult> Index()
+        {
+            return View(await db.Clients.ToListAsync());
+        }
+        [Authorize]
+        public async Task<IActionResult> Remonts()
+        {
+            return View(await db.Remonts.ToListAsync());
+        }
+        [Authorize]
+        public async Task<IActionResult> Workers()
+        {
+            return View(await db.Workers.ToListAsync());
         }
         public IActionResult AddWorker()
         {
