@@ -46,7 +46,7 @@ namespace BDshka.Controllers
         public IActionResult Delete(DeleteModel model)
         {
             db.Clients.Remove(model.Client);
-            return RedirectToAction("Index","Home");
+            return RedirectToAction("Index","Admin");
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -65,7 +65,7 @@ namespace BDshka.Controllers
                     db.Workers.Add(item);
                     await db.SaveChangesAsync();
 
-                    return RedirectToAction("Workers", "Home");
+                    return RedirectToAction("Workers", "Admin");
                 }
                 else
                     ModelState.AddModelError("", "Некорректные логин и(или) пароль");
@@ -92,12 +92,49 @@ namespace BDshka.Controllers
                     db.Remonts.Add(item);
                     await db.SaveChangesAsync();
 
-                    return RedirectToAction("Remonts", "Home");
+                    return RedirectToAction("Remonts", "Admin");
                 }
                 else
                     ModelState.AddModelError("", "Некорректные логин и(или) пароль");
             }
             return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id != null)
+            {
+                ClientsModel? user = await db.Clients.FirstOrDefaultAsync(p => p.ID_Client == id);
+                if (user != null)
+                {
+                    db.Clients.Remove(user);
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("Index", "Admin");
+                }
+            }
+            return NotFound();
+        }
+        [HttpGet]
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id != null)
+            {
+                ClientsModel? user = await db.Clients.FirstOrDefaultAsync(p => p.ID_Client == id);
+                if (user != null) return View(user);
+            }
+            return NotFound();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Edit(ClientsModel user)
+        {
+            ClientsModel? userDB = await db.Clients.FirstOrDefaultAsync(p => p.ID_Client == user.ID_Client);
+            userDB.Phone_Number = user.Phone_Number;
+            userDB.FIO = user.FIO;
+            userDB.ID_Role = user.ID_Role;
+            //db.Clients.Update(user);
+            await db.SaveChangesAsync();
+            return RedirectToAction("Index", "Admin");
         }
     }
 }

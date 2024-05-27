@@ -1,7 +1,7 @@
 ﻿@model BDshka.Models.ClientsModel
 
 <h2>Редактирование пользователя</h2>
-<form asp-action="edit" asp-controller="account" asp-route-id="@Model.ID_Client">
+<form asp-action="edit" asp-controller="admin" asp-route-id="@Model.ID_Client">
     <p>
         <label asp-for="ID_Client">ID</label><br />
         <input type="hidden" asp-for="ID_Client" />
@@ -16,6 +16,11 @@
         <label asp-for="Phone_Number">Телефон</label><br />
         <input type="text" asp-for="Phone_Number" />
         <span asp-validation-for="Phone_Number"></span>
+    </p>
+    <p>
+        <label asp-for="ID_Role">Роль</label><br />
+        <input type="number" asp-for="ID_Role" />
+        <span asp-validation-for="ID_Role"></span>
     </p>
     <p>
         <input type="submit" value="Сохранить" />

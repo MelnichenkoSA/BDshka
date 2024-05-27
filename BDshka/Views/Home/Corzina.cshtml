@@ -1,7 +1,7 @@
-﻿@model IEnumerable<BDshka.Models.ClientsModel>
+﻿@model IEnumerable<BDshka.ViewModels.CorzinaViewModel>
 
-<h2>Список пользователей для Админа</h2>
-<p><a asp-action="Registration" asp-controller="account">Добавить пользователя</a></p>
+<h2>Корзина</h2>
+<p><a asp-action="AddtoCorzinaRemont" asp-controller="account">Добавить услугу в корзину</a></p>
 
 <table class="table">
     <tr><th>ID</th><th>Имя</th><th>Телефон</th><th>Роль</th></tr>
@@ -12,9 +12,6 @@
             <td>@item.FIO</td>
             <td>@item.Phone_Number</td>
             <td>@item.ID_Role</td>
-            <td>
-                <a asp-action="Edit" asp-controller="admin" asp-route-id="@item.ID_Client">Изменить</a>
-            </td>
             <td>
                 <form asp-controller="admin" asp-action="Delete" method="post" asp-route-id="@item.ID_Client">
                     <input type="submit" value="Удалить" />

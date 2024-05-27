@@ -55,6 +55,16 @@ namespace BDshka.Controllers
             return View(await db.Remonts.ToListAsync());
         }
         [Authorize]
+        public async Task<IActionResult> Materials()
+        {
+            return View(await db.Book_of_Material.ToListAsync());
+        }
+        [Authorize]
+        public async Task<IActionResult> Corzina()
+        {
+            return View(await db.Workers.ToListAsync());
+        }
+        [Authorize]
         public async Task<IActionResult> Workers()
         {
             return View(await db.Workers.ToListAsync());

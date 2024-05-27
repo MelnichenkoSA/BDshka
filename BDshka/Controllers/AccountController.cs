@@ -125,6 +125,38 @@ namespace BDshka.Controllers
             }
             return NotFound();
         }
+
+        [HttpPost]
+        public async Task<IActionResult> AddtoCorzinaRemont(int? id)
+        {
+            if (id != null)
+            {
+                Order_RemontModel? user = await db.Order_Remont.FirstOrDefaultAsync(p => p.ID_Remont == id && p.ID_Client) ;
+                if (user != null)
+                {
+                    db.Order_Remont.Add(user);
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("Corzina", "Home");
+                }
+            }
+            return NotFound();
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddtoCorzinaMaterial(int? id)
+        {
+            if (id != null)
+            {
+                Order_MaterialModel? user = await db.Order_Remont.FirstOrDefaultAsync(p => p.ID_Remont == id && p.ID_Client);
+                if (user != null)
+                {
+                    db.Order_Material.Add(user);
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("Corzina", "Home");
+                }
+            }
+            return NotFound();
+        }
+
         [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
@@ -141,6 +173,7 @@ namespace BDshka.Controllers
             ClientsModel? userDB = await db.Clients.FirstOrDefaultAsync(p => p.ID_Client == user.ID_Client);
             userDB.Phone_Number = user.Phone_Number;
             userDB.FIO = user.FIO;
+            userDB.ID_Role = user.ID_Role;
 
             //db.Clients.Update(user);
             await db.SaveChangesAsync();

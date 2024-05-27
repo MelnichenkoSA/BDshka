@@ -1,17 +1,18 @@
-﻿@model IEnumerable<BDshka.Models.RemontsModel>
+﻿@model IEnumerable<BDshka.Models.Book_of_MaterialModel>
 
-<h2>Список услуг</h2>
+<h2>Список материалов</h2>
 
 <table class="table">
     <tr><th>ID</th><th>Название</th><th>Стоимость</th></tr>
     @foreach (var item in Model)
     {
         <tr>
-            <td>@item.ID_Remont</td>
+            <td>@item.ID_Material</td>
+            <td>@item.ID_Category</td>
             <td>@item.Title</td>
             <td>@item.Cost</td>
             <td>
-                <form asp-controller="Home" asp-action="AddtoCorzinaRemont" method="post" asp-route-id="@item.ID_Remont">
+                <form asp-controller="Home" asp-action="AddtoCorzinaMaterial" method="post" asp-route-id="@item.ID_Material">
                     <input type="submit" value="Выбрать" />
                 </form>
             </td>
