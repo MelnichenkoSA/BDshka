@@ -62,7 +62,7 @@ namespace BDshka.Controllers
         [Authorize]
         public async Task<IActionResult> Corzina()
         {
-            return View(await db.Workers.ToListAsync());
+            return View(await db.Order_Remont.ToListAsync());
         }
         [Authorize]
         public async Task<IActionResult> Workers()

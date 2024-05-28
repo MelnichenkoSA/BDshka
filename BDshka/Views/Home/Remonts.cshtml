@@ -11,7 +11,7 @@
             <td>@item.Title</td>
             <td>@item.Cost</td>
             <td>
-                <form asp-controller="Home" asp-action="AddtoCorzinaRemont" method="post" asp-route-id="@item.ID_Remont">
+                <form asp-controller="Account" asp-action="AddtoCorzinaRemont" method="post" asp-route-id="@item.ID_Remont">
                     <input type="submit" value="Выбрать" />
                 </form>
             </td>

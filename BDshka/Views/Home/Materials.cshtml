@@ -12,7 +12,7 @@
             <td>@item.Title</td>
             <td>@item.Cost</td>
             <td>
-                <form asp-controller="Home" asp-action="AddtoCorzinaMaterial" method="post" asp-route-id="@item.ID_Material">
+                <form asp-controller="Home" asp-action="AddtoNaborMaterial" method="post" asp-route-id="@item.ID_Material">
                     <input type="submit" value="Выбрать" />
                 </form>
             </td>

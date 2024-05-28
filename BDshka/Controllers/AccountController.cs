@@ -13,6 +13,9 @@ namespace BDshka.Controllers
 {
     public class AccountController : Controller
     {
+        private int CurrentOrder;
+        private DateTime Today = new DateTime();
+        private int CurrentID;
         private BDContext db;
         public AccountController(BDContext context)
         {
@@ -38,6 +41,7 @@ namespace BDshka.Controllers
                 if (sec != null)
                 {
                     await Authenticate(model.Log_in); // аутентификация
+                    CurrentID = sec.ID_Client;
                     if(sec.ID_Role == 1)
                     {
                         return RedirectToAction("Index", "Home");
@@ -127,29 +131,38 @@ namespace BDshka.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddtoCorzinaRemont(int? id)
+        public async Task<IActionResult> AddtoCorzinaRemont(int id)
         {
+            
             if (id != null)
             {
-                Order_RemontModel? user = await db.Order_Remont.FirstOrDefaultAsync(p => p.ID_Remont == id && p.ID_Client) ;
-                if (user != null)
-                {
-                    db.Order_Remont.Add(user);
-                    await db.SaveChangesAsync();
-                    return RedirectToAction("Corzina", "Home");
-                }
+                db.Order_Remont.Add(new Order_RemontModel { ID_Remont = id, ID_Client = CurrentID, Date_Order = Today, ID_Stat = 1});
+                await db.SaveChangesAsync();
+                return RedirectToAction("Corzina", "Home");
+
             }
             return NotFound();
         }
         [HttpPost]
-        public async Task<IActionResult> AddtoCorzinaMaterial(int? id)
+        public async Task<IActionResult> AddtoCorzinaMaterial()
+        {
+                
+                
+                    db.Order_Material.Add(new Order_MaterialModel {ID_Client = CurrentID, Date_Order = Today, ID_Stat = 1 });
+                    
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("Materials", "Home");
+                
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddtoNaborMaterial(int? id)
         {
             if (id != null)
             {
-                Order_MaterialModel? user = await db.Order_Remont.FirstOrDefaultAsync(p => p.ID_Remont == id && p.ID_Client);
+                Material_NaborModel? user = await db.Material_Nabor.FirstOrDefaultAsync(p => p.ID_Material == id  );
                 if (user != null)
                 {
-                    db.Order_Material.Add(user);
+                    db.Material_Nabor.Add(user);
                     await db.SaveChangesAsync();
                     return RedirectToAction("Corzina", "Home");
                 }
