@@ -36,7 +36,7 @@ namespace BDshka.Controllers
                 byte[] inputBytes = Encoding.ASCII.GetBytes(model.Log_in + model.Pass_word);
                 byte[] hash = Hash.ComputeHash(inputBytes);
                 model.Pass_word = Convert.ToHexString(hash);
-
+                
                 ClientsModel sec = await db.Clients.FirstOrDefaultAsync(u =>  u.Log_in == model.Log_in && u.Pass_word == model.Pass_word );
                 if (sec != null)
                 {
