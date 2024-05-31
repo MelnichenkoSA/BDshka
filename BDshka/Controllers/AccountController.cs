@@ -1,13 +1,12 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-using BDshka.Models;
-using Microsoft.EntityFrameworkCore;
-using System.Net.Sockets;
-using System.Text;
-using System.Security.Cryptography;
+﻿using BDshka.Models;
 using BDshka.ViewModels;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace BDshka.Controllers
 {
@@ -36,25 +35,19 @@ namespace BDshka.Controllers
                 byte[] inputBytes = Encoding.ASCII.GetBytes(model.Log_in + model.Pass_word);
                 byte[] hash = Hash.ComputeHash(inputBytes);
                 model.Pass_word = Convert.ToHexString(hash);
-                
-                ClientsModel sec = await db.Clients.FirstOrDefaultAsync(u =>  u.Log_in == model.Log_in && u.Pass_word == model.Pass_word );
+
+                ClientsModel sec = await db.Clients.FirstOrDefaultAsync(u => u.Log_in == model.Log_in && u.Pass_word == model.Pass_word);
                 if (sec != null)
                 {
-                    await Authenticate(model.Log_in); // аутентификация
-                    CurrentID = sec.ID_Client;
-                    if(sec.ID_Role == 1)
+                    await Authenticate(sec); // аутентификация
+                    if (User.IsInRole("1"))
                     {
                         return RedirectToAction("Index", "Home");
                     }
-                    if (sec.ID_Role == 2)
-                    {
-                        return RedirectToAction("Index", "Home");
-                    }
-                    if (sec.ID_Role == 3)
+                    if (User.IsInRole("3"))
                     {
                         return RedirectToAction("Index", "Admin");
                     }
-
                 }
                 ModelState.AddModelError("", "Некорректные логин и(или) пароль");
             }
@@ -81,10 +74,10 @@ namespace BDshka.Controllers
                 if (sec == null)
                 {
                     // добавляем пользователя в бд
-                    db.Clients.Add(new ClientsModel { ID_Client = model.ID_Client, FIO = model.FIO, Phone_Number = model.Phone_Number, ID_Role = 1, Pass_word = model.Pass_word, Log_in = model.Log_in});
+                    db.Clients.Add(new ClientsModel { ID_Client = model.ID_Client, FIO = model.FIO, Phone_Number = model.Phone_Number, ID_Role = 1, Pass_word = model.Pass_word, Log_in = model.Log_in });
                     await db.SaveChangesAsync();
 
-                    await Authenticate(model.Log_in); // аутентификация
+                    await Authenticate(model); // аутентификация
 
                     return RedirectToAction("Index", "Home");
                 }
@@ -92,7 +85,7 @@ namespace BDshka.Controllers
                     ModelState.AddModelError("", "Некорректные логин и(или) пароль");
             }
             ModelState.AddModelError("", "");
-            return View(model); 
+            return View(model);
         }
         /*public async Task<IActionResult> PostRegistration(ClientsModel model)
         {
@@ -124,7 +117,7 @@ namespace BDshka.Controllers
                 {
                     db.Clients.Remove(user);
                     await db.SaveChangesAsync();
-                    return RedirectToAction("Index","Home");
+                    return RedirectToAction("Index", "Home");
                 }
             }
             return NotFound();
@@ -133,10 +126,10 @@ namespace BDshka.Controllers
         [HttpPost]
         public async Task<IActionResult> AddtoCorzinaRemont(int id)
         {
-            
+
             if (id != null)
             {
-                db.Order_Remont.Add(new Order_RemontModel { ID_Remont = id, ID_Client = CurrentID, Date_Order = Today, ID_Stat = 1});
+                db.Order_Remont.Add(new Order_RemontModel { ID_Remont = id, ID_Client = Convert.ToInt32(User.FindFirst("ID").Value), Date_Order = Today, ID_Stat = 1 });
                 await db.SaveChangesAsync();
                 return RedirectToAction("Corzina", "Home");
 
@@ -146,26 +139,24 @@ namespace BDshka.Controllers
         [HttpPost]
         public async Task<IActionResult> AddtoCorzinaMaterial()
         {
-                
-                
-                    db.Order_Material.Add(new Order_MaterialModel {ID_Client = CurrentID, Date_Order = Today, ID_Stat = 1 });
-                    
-                    await db.SaveChangesAsync();
-                    return RedirectToAction("Materials", "Home");
-                
+
+
+            db.Order_Material.Add(new Order_MaterialModel { ID_Client = Convert.ToInt32(User.FindFirst("ID")), Date_Order = Today, ID_Stat = 1 });
+
+            await db.SaveChangesAsync();
+            return RedirectToAction("Materials", "Home");
+
         }
         [HttpPost]
-        public async Task<IActionResult> AddtoNaborMaterial(int? id)
+        public async Task<IActionResult> AddtoNaborMaterial(int id, int order, int kolvo)
         {
             if (id != null)
             {
-                Material_NaborModel? user = await db.Material_Nabor.FirstOrDefaultAsync(p => p.ID_Material == id  );
-                if (user != null)
-                {
-                    db.Material_Nabor.Add(user);
-                    await db.SaveChangesAsync();
-                    return RedirectToAction("Corzina", "Home");
-                }
+
+                db.Material_Nabor.Add(new Material_NaborModel { ID_Material = id, ID_Order = order, Kol_vo = kolvo});
+                await db.SaveChangesAsync();
+                return RedirectToAction("Corzina", "Home");
+
             }
             return NotFound();
         }
@@ -190,7 +181,7 @@ namespace BDshka.Controllers
 
             //db.Clients.Update(user);
             await db.SaveChangesAsync();
-            return RedirectToAction("Index","Home");
+            return RedirectToAction("Index", "Home");
         }
 
         [AcceptVerbs("Get", "Post")]
@@ -201,12 +192,14 @@ namespace BDshka.Controllers
             return Json(true);
         }
 
-        private async Task Authenticate(string userName)
+        private async Task Authenticate(ClientsModel Client)
         {
             // создаем один claim
             var claims = new List<Claim>
             {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, userName)
+                new Claim(ClaimsIdentity.DefaultNameClaimType, Client.Log_in),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, Client.ID_Role.ToString()),
+                new Claim("ID", Client.ID_Client.ToString()),
             };
             // создаем объект ClaimsIdentity
             ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
