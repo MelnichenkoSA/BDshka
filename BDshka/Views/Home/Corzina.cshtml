@@ -13,10 +13,13 @@
             <td>@item.ID_Stat</td>
             <td>@item.ID_Client</td>
             <td>
-                <form asp-controller="admin" asp-action="Delete" method="post" asp-route-id="@item.ID_Order">
+                <form asp-controller="admin" asp-action="DeleteRemont" method="post" asp-route-id="@item.ID_Order">
                     <input type="submit" value="Удалить" />
                 </form>
             </td>
         </tr>
     }
+    <form asp-controller="admin" asp-action="DeleteAllRemonts" method="post">
+        <input type="submit" value="Удалить Всё" />
+    </form>
 </table>

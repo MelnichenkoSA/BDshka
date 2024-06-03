@@ -1,8 +1,8 @@
 ﻿@model IEnumerable<BDshka.Models.Book_of_MaterialModel>
 
 <h2>Список материалов</h2>
-
-<table class="table">
+<form asp-controller="Account" asp-action="AddtoNaborMaterial">
+<table class="table" >
     <tr><th>ID</th><th>Название</th><th>Стоимость</th></tr>
     @foreach (var item in Model)
     {
@@ -12,10 +12,15 @@
             <td>@item.Title</td>
             <td>@item.Cost</td>
             <td>
-                <form asp-controller="Home" asp-action="AddtoNaborMaterial" method="post" asp-route-id="@item.ID_Material">
-                    <input type="submit" value="Выбрать" />
-                </form>
+                <label>Выбрать </label>
+                    <input type="checkbox" name="IsChoosen" value="false" asp-route-id="@item.ID_Material" />
+            </td>
+            <td>
+                <label>Выбрать </label>
+                <input type="number" name="Kolvo" value="1" />
             </td>
         </tr>
     }
+        <input type="submit" value="Выбрать" />
 </table>
+</form>

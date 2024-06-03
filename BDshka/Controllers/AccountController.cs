@@ -40,11 +40,11 @@ namespace BDshka.Controllers
                 if (sec != null)
                 {
                     await Authenticate(sec); // аутентификация
-                    if (User.IsInRole("1"))
+                    if (sec.ID_Role == 1)
                     {
                         return RedirectToAction("Index", "Home");
                     }
-                    if (User.IsInRole("3"))
+                    if (sec.ID_Role == 3)
                     {
                         return RedirectToAction("Index", "Admin");
                     }
@@ -147,12 +147,12 @@ namespace BDshka.Controllers
             return RedirectToAction("Materials", "Home");
 
         }
+        [HttpGet]
         [HttpPost]
         public async Task<IActionResult> AddtoNaborMaterial(int id, int order, int kolvo)
         {
-            if (id != null)
+            if (true)
             {
-
                 db.Material_Nabor.Add(new Material_NaborModel { ID_Material = id, ID_Order = order, Kol_vo = kolvo});
                 await db.SaveChangesAsync();
                 return RedirectToAction("Corzina", "Home");

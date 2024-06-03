@@ -1,0 +1,15 @@
+﻿@model IEnumerable<BDshka.Models.Material_NaborModel>
+
+<h2>Список пользователей</h2>
+
+<table class="table">
+    <tr><th>ID</th><th>Имя</th><th>Телефон</th><th>Роль</th></tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.ID_Order</td>
+            <td>@item.ID_Material</td>
+            <td>@item.Kol_vo</td>
+        </tr>
+    }
+</table>

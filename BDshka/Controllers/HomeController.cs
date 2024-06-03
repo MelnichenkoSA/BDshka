@@ -64,11 +64,6 @@ namespace BDshka.Controllers
         {
             return View(await db.Order_Remont.ToListAsync());
         }
-        [Authorize]
-        public async Task<IActionResult> Workers()
-        {
-            return View(await db.Workers.ToListAsync());
-        }
         /*public IActionResult Registration()
         {
             return View();

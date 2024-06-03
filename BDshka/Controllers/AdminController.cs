@@ -48,6 +48,14 @@ namespace BDshka.Controllers
             db.Clients.Remove(model.Client);
             return RedirectToAction("Index","Admin");
         }
+
+        [HttpPost]
+        [HttpDelete]
+        public IActionResult DeleteAllRemonts()
+        {
+            db.Order_Remont.RemoveRange(db.Order_Remont);
+            return RedirectToAction("Corzina", "Home");
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddWorker(WorkersModel model)
