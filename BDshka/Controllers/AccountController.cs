@@ -156,7 +156,11 @@ namespace BDshka.Controllers
             await db.SaveChangesAsync();
             return RedirectToAction("AddtoCorzinaMaterial", "Account", order);
         }
-
+        public int HashID()
+        {
+            DateTime date = DateTime.Now;
+            return date;
+        }
         [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
@@ -180,13 +184,7 @@ namespace BDshka.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        [AcceptVerbs("Get", "Post")]
-        public IActionResult CheckEmail(string login)
-        {
-            if (db.Find(login))
-                return Json(false);
-            return Json(true);
-        }
+        
 
         private async Task Authenticate(ClientsModel Client)
         {
