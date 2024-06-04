@@ -137,28 +137,24 @@ namespace BDshka.Controllers
             return NotFound();
         }
         [HttpPost]
-        public async Task<IActionResult> AddtoCorzinaMaterial()
+        public async Task<IActionResult> AddtoCorzinaMaterial(int order)
         {
-
-
-            db.Order_Material.Add(new Order_MaterialModel { ID_Client = Convert.ToInt32(User.FindFirst("ID")), Date_Order = Today, ID_Stat = 1 });
+            db.Order_Material.Add(new Order_MaterialModel { ID_Client = Convert.ToInt32(User.FindFirst("ID")), Date_Order = Today, ID_Stat = 1 , ID_Order = order});
 
             await db.SaveChangesAsync();
             return RedirectToAction("Materials", "Home");
-
         }
         [HttpGet]
         [HttpPost]
-        public async Task<IActionResult> AddtoNaborMaterial(int id, int order, int kolvo)
+        public async Task<IActionResult> AddtoNaborMaterial(int id, int kolvo, List<int> IsChoosen)
         {
-            if (true)
+            int order = Convert.ToInt32(new DateTime());
+            foreach (int item in IsChoosen)
             {
-                db.Material_Nabor.Add(new Material_NaborModel { ID_Material = id, ID_Order = order, Kol_vo = kolvo});
-                await db.SaveChangesAsync();
-                return RedirectToAction("Corzina", "Home");
-
+                db.Material_Nabor.Add(new Material_NaborModel { ID_Material = item, ID_Order = order, Kol_vo = kolvo });
             }
-            return NotFound();
+            await db.SaveChangesAsync();
+            return RedirectToAction("AddtoCorzinaMaterial", "Account", order);
         }
 
         [HttpGet]

@@ -1,0 +1,25 @@
+﻿@model IEnumerable<BDshka.Models.Order_RemontModel>
+
+<h2>Корзина</h2>
+<p><a asp-action="AddtoCorzinaRemont" asp-controller="account">Добавить услугу в корзину</a></p>
+
+<table class="table">
+    <tr><th>ID</th><th>Дата</th><th>Статус</th><th>ID Клиента</th></tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.ID_Order</td>
+            <td>@item.Date_Order</td>
+            <td>@item.ID_Stat</td>
+            <td>@item.ID_Client</td>
+            <td>
+                <form asp-controller="admin" asp-action="DeleteRemont" method="post" asp-route-id="@item.ID_Order">
+                    <input type="submit" value="Удалить" />
+                </form>
+            </td>
+        </tr>
+    }
+    <form asp-controller="admin" asp-action="DeleteAllRemonts" method="post">
+        <input type="submit" value="Удалить Всё" />
+    </form>
+</table>

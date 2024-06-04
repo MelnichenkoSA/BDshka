@@ -48,7 +48,12 @@ namespace BDshka.Controllers
             db.Clients.Remove(model.Client);
             return RedirectToAction("Index","Admin");
         }
-
+        [HttpDelete]
+        public IActionResult DeleteRemont(Order_RemontModel model)
+        {
+            db.Order_Remont.Remove(model);
+            return RedirectToAction("Index", "Admin");
+        }
         [HttpPost]
         [HttpDelete]
         public IActionResult DeleteAllRemonts()

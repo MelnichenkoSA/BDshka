@@ -1,10 +1,10 @@
-﻿@model IEnumerable<BDshka.Models.Order_RemontModel>
+﻿@model IEnumerable<BDshka.Models.Order_MaterialModel>
 
 <h2>Корзина</h2>
-<p><a asp-action="AddtoCorzinaRemont" asp-controller="account">Добавить услугу в корзину</a></p>
+<p><a asp-action="Materials" asp-controller="home">Добавить материал в корзину</a></p>
 
 <table class="table">
-    <tr><th>ID</th><th>Имя</th><th>Телефон</th><th>Роль</th></tr>
+    <tr><th>ID</th><th>Дата</th><th>Статус</th><th>ID Клиента</th></tr>
     @foreach (var item in Model)
     {
         <tr>
