@@ -60,10 +60,26 @@ namespace BDshka.Controllers
             return View(await db.Book_of_Material.ToListAsync());
         }
         [Authorize]
-        public async Task<IActionResult> Corzina()
+        public async Task<IActionResult> CorzinaRemont()
         {
             return View(await db.Order_Remont.ToListAsync());
         }
+        [Authorize]
+        public async Task<IActionResult> CorzinaMaterial()
+        {
+            return View(await db.Order_Material.ToListAsync());
+        }
+        [Authorize]
+        public async Task<IActionResult> MaterialNabor(int id)
+        {
+            var result = db.Material_Nabor.Where(u => u.ID_Order == id);
+            if(result != null) 
+            {
+                return View(result);
+            }
+            return RedirectToAction("CorzinaMaterial", "Home");
+        }
+
         /*public IActionResult Registration()
         {
             return View();

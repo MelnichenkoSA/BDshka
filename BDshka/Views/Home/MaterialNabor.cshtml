@@ -1,25 +1,20 @@
-﻿@model IEnumerable<BDshka.Models.Order_MaterialModel>
+﻿@model IEnumerable<BDshka.Models.Material_NaborModel>
 
 <h2>Корзина</h2>
 <p><a asp-action="Materials" asp-controller="home">Добавить материал в корзину</a></p>
 
 <table class="table">
-    <tr><th>ID</th><th>Дата</th><th>Статус</th><th>ID Клиента</th></tr>
+    <tr><th>ID</th><th>ID Заказа</th><th>ID Материала</th><th>Количество</th></tr>
     @foreach (var item in Model)
     {
         <tr>
+            <td>@item.ID_Nabor</td>
             <td>@item.ID_Order</td>
-            <td>@item.Date_Order</td>
-            <td>@item.ID_Stat</td>
-            <td>@item.ID_Client</td>
+            <td>@item.ID_Material</td>
+            <td>@item.Kol_vo</td>
             <td>
                 <form asp-controller="admin" asp-action="DeleteOrder" method="post" asp-route-id="@item.ID_Order">
                     <input type="submit" value="Удалить" />
-                </form>
-            </td>
-            <td>
-                <form asp-controller="home" asp-action="MaterialNabor" asp-route-id="@item.ID_Order">
-                    <input type="submit" value="Состав" />
                 </form>
             </td>
         </tr>

@@ -136,31 +136,30 @@ namespace BDshka.Controllers
             }
             return NotFound();
         }
-        [HttpPost]
-        public async Task<IActionResult> AddtoCorzinaMaterial(int order)
-        {
-            db.Order_Material.Add(new Order_MaterialModel { ID_Client = Convert.ToInt32(User.FindFirst("ID")), Date_Order = Today, ID_Stat = 1 , ID_Order = order});
+        //[HttpPost]
+        //public async Task<IActionResult> AddtoCorzinaMaterial(int order)
+        //{
+        //    db.Order_Material.Add(new Order_MaterialModel { ID_Client = Convert.ToInt32(User.FindFirst("ID")), Date_Order = Today, ID_Stat = 1 , ID_Order = order});
 
-            await db.SaveChangesAsync();
-            return RedirectToAction("Materials", "Home");
-        }
+        //    await db.SaveChangesAsync();
+        //    return RedirectToAction("Materials", "Home");
+        //}
         [HttpGet]
         [HttpPost]
         public async Task<IActionResult> AddtoNaborMaterial(int id, int kolvo, List<int> IsChoosen)
         {
-            int order = Convert.ToInt32(new DateTime());
+            Order_MaterialModel order = new Order_MaterialModel { ID_Client = Convert.ToInt32(User.FindFirst("ID").Value), Date_Order = Today, ID_Stat = 1};
+            db.Order_Material.Add(order);
+            var a = db.Order_Material.OrderBy(u => u.ID_Order).First().ID_Order;
             foreach (int item in IsChoosen)
             {
-                db.Material_Nabor.Add(new Material_NaborModel { ID_Material = item, ID_Order = order, Kol_vo = kolvo });
+                db.Material_Nabor.Add(new Material_NaborModel { ID_Material = item, ID_Order = db.Order_Material.OrderBy(u => u.ID_Order).Last().ID_Order, Kol_vo = kolvo });
             }
             await db.SaveChangesAsync();
-            return RedirectToAction("AddtoCorzinaMaterial", "Account", order);
+            return RedirectToAction("CorzinaMaterial", "Home");
         }
-        public int HashID()
-        {
-            DateTime date = DateTime.Now;
-            return date;
-        }
+
+
         [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
