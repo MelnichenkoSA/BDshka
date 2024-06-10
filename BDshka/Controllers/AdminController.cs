@@ -62,6 +62,15 @@ namespace BDshka.Controllers
             return RedirectToAction("Corzina", "Home");
         }
         [HttpPost]
+        [HttpDelete]
+        public async Task<IActionResult> DeleteAllOrderss()
+        {
+            db.Order_Material.RemoveRange(db.Order_Material);
+            db.Material_Nabor.RemoveRange(db.Material_Nabor);
+            await db.SaveChangesAsync();
+            return RedirectToAction("CorzinaMaterial", "Home");
+        }
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddWorker(WorkersModel model)
         {

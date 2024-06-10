@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -146,14 +147,23 @@ namespace BDshka.Controllers
         //}
         [HttpGet]
         [HttpPost]
-        public async Task<IActionResult> AddtoNaborMaterial(int id, int kolvo, List<int> IsChoosen)
+        public async Task<IActionResult> AddtoNaborMaterial(int id, List<int> kolvo, List<int> IsChoosen)
         {
+            var a = 0;
             Order_MaterialModel order = new Order_MaterialModel { ID_Client = Convert.ToInt32(User.FindFirst("ID").Value), Date_Order = Today, ID_Stat = 1};
             db.Order_Material.Add(order);
-            var a = db.Order_Material.OrderBy(u => u.ID_Order).First().ID_Order;
+            if(db.Order_Material.IsNullOrEmpty())
+            {
+                a = 1;
+            }
+            else 
+            {
+                a = db.Order_Material.OrderBy(u => u.ID_Order).Last().ID_Order + 1;
+            }
+            
             foreach (int item in IsChoosen)
             {
-                db.Material_Nabor.Add(new Material_NaborModel { ID_Material = item, ID_Order = db.Order_Material.OrderBy(u => u.ID_Order).Last().ID_Order, Kol_vo = kolvo });
+                db.Material_Nabor.Add(new Material_NaborModel { ID_Material = item, ID_Order = a, Kol_vo = kolvo[item-1] });
             }
             await db.SaveChangesAsync();
             return RedirectToAction("CorzinaMaterial", "Home");
