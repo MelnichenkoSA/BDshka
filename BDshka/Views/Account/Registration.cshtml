@@ -1,6 +1,8 @@
 ﻿@model BDshka.Models.ClientsModel
 
 <h2>Регистрация</h2>
+<p><a asp-action="Index" asp-controller="home">Отмена</a></p>
+
 <form asp-antiforgery="true" asp-action="registration" asp-controller="account">
     <div>
         <div class="validation" asp-validation-summary="ModelOnly"></div>

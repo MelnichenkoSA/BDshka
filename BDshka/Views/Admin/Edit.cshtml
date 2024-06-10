@@ -1,6 +1,8 @@
 ﻿@model BDshka.Models.ClientsModel
 
 <h2>Редактирование пользователя</h2>
+<p><a asp-action="Index" asp-controller="admin">Отмена</a></p>
+
 <form asp-action="edit" asp-controller="admin" asp-route-id="@Model.ID_Client">
     <p>
         <label asp-for="ID_Client">ID</label><br />

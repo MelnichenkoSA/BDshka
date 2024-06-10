@@ -1,6 +1,7 @@
 ﻿@model BDshka.Models.RemontsModel
 
 <h2>Добавление услуги</h2>
+<p><a asp-action="Index" asp-controller="admin">Отмена</a></p>
 <form asp-antiforgery="true" asp-action="AddRemont" asp-controller="admin">
     <div>
         <div class="validation" asp-validation-summary="ModelOnly"></div>

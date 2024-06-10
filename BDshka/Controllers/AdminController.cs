@@ -42,24 +42,37 @@ namespace BDshka.Controllers
         {
             return View();
         }
+        [HttpPost]
         [HttpDelete]
-        public IActionResult Delete(DeleteModel model)
+        public async Task<IActionResult> Delete(DeleteModel model)
         {
             db.Clients.Remove(model.Client);
+            await db.SaveChangesAsync();
             return RedirectToAction("Index","Admin");
-        }
-        [HttpDelete]
-        public IActionResult DeleteRemont(Order_RemontModel model)
-        {
-            db.Order_Remont.Remove(model);
-            return RedirectToAction("Index", "Admin");
         }
         [HttpPost]
         [HttpDelete]
-        public IActionResult DeleteAllRemonts()
+        public async Task<IActionResult> DeleteRemont(Order_RemontModel model)
+        {
+            db.Order_Remont.Remove(model);
+            await db.SaveChangesAsync();
+            return RedirectToAction("CorzinaRemont", "Home");
+        }
+        [HttpPost]
+        [HttpDelete]
+        public async Task<IActionResult> DeleteOrder(Order_RemontModel model)
+        {
+            db.Order_Remont.Remove(model);
+            await db.SaveChangesAsync();
+            return RedirectToAction("CorzinaMaterial", "Home");
+        }
+        [HttpPost]
+        [HttpDelete]
+        public async Task<IActionResult> DeleteAllRemonts()
         {
             db.Order_Remont.RemoveRange(db.Order_Remont);
-            return RedirectToAction("Corzina", "Home");
+            await db.SaveChangesAsync();
+            return RedirectToAction("CorzinaRemont", "Home");
         }
         [HttpPost]
         [HttpDelete]
@@ -154,7 +167,7 @@ namespace BDshka.Controllers
             userDB.Phone_Number = user.Phone_Number;
             userDB.FIO = user.FIO;
             userDB.ID_Role = user.ID_Role;
-            //db.Clients.Update(user);
+            db.Clients.Update(user);
             await db.SaveChangesAsync();
             return RedirectToAction("Index", "Admin");
         }

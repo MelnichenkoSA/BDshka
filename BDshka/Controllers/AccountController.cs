@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -13,9 +12,7 @@ namespace BDshka.Controllers
 {
     public class AccountController : Controller
     {
-        private int CurrentOrder;
         private DateTime Today = new DateTime();
-        private int CurrentID;
         private BDContext db;
         public AccountController(BDContext context)
         {
@@ -40,7 +37,7 @@ namespace BDshka.Controllers
                 ClientsModel sec = await db.Clients.FirstOrDefaultAsync(u => u.Log_in == model.Log_in && u.Pass_word == model.Pass_word);
                 if (sec != null)
                 {
-                    await Authenticate(sec); // аутентификация
+                    await Authenticate(sec);
                     if (sec.ID_Role == 1)
                     {
                         return RedirectToAction("Index", "Home");
@@ -63,7 +60,6 @@ namespace BDshka.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Registration(ClientsModel model)
         {
-
             SHA256 Hash = SHA256.Create();
             byte[] inputBytes = Encoding.ASCII.GetBytes(model.Log_in + model.Pass_word);
             byte[] hash = Hash.ComputeHash(inputBytes);
@@ -74,11 +70,10 @@ namespace BDshka.Controllers
                 ClientsModel sec = await db.Clients.FirstOrDefaultAsync(u => u.ID_Client == model.ID_Client && u.Log_in == model.Log_in && u.Pass_word == model.Pass_word && u.FIO == model.FIO && u.Phone_Number == model.Phone_Number && u.ID_Role == model.ID_Role);
                 if (sec == null)
                 {
-                    // добавляем пользователя в бд
                     db.Clients.Add(new ClientsModel { ID_Client = model.ID_Client, FIO = model.FIO, Phone_Number = model.Phone_Number, ID_Role = 1, Pass_word = model.Pass_word, Log_in = model.Log_in });
                     await db.SaveChangesAsync();
 
-                    await Authenticate(model); // аутентификация
+                    await Authenticate(model);
 
                     return RedirectToAction("Index", "Home");
                 }
@@ -88,26 +83,7 @@ namespace BDshka.Controllers
             ModelState.AddModelError("", "");
             return View(model);
         }
-        /*public async Task<IActionResult> PostRegistration(ClientsModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                ClientsModel client = await db.Clients.FirstOrDefaultAsync(u => u.ID_Client == model.ID_Client && u.FIO == model.FIO && u.Phone_Number == model.Phone_Number && u.ID_Role == model.ID_Role);
-                if (client == null)
-                {
-                    // добавляем пользователя в бд
-                    db.Clients.Add(new ClientsModel { ID_Client = model.ID_Client, FIO = model.FIO, Phone_Number = model.Phone_Number, ID_Role = 1 });
-                    await db.SaveChangesAsync();
 
-                    await Authenticate(model.Phone_Number); // аутентификация
-
-                    return RedirectToAction("Index", "Home");
-                }
-                else
-                    ModelState.AddModelError("", "Некорректные логин и(или) пароль");
-            }
-            return View(model); ;
-        }*/
         [HttpPost]
         public async Task<IActionResult> Delete(int? id)
         {
@@ -137,33 +113,21 @@ namespace BDshka.Controllers
             }
             return NotFound();
         }
-        //[HttpPost]
-        //public async Task<IActionResult> AddtoCorzinaMaterial(int order)
-        //{
-        //    db.Order_Material.Add(new Order_MaterialModel { ID_Client = Convert.ToInt32(User.FindFirst("ID")), Date_Order = Today, ID_Stat = 1 , ID_Order = order});
 
-        //    await db.SaveChangesAsync();
-        //    return RedirectToAction("Materials", "Home");
-        //}
         [HttpGet]
         [HttpPost]
         public async Task<IActionResult> AddtoNaborMaterial(int id, List<int> kolvo, List<int> IsChoosen)
         {
             var a = 0;
-            Order_MaterialModel order = new Order_MaterialModel { ID_Client = Convert.ToInt32(User.FindFirst("ID").Value), Date_Order = Today, ID_Stat = 1};
+            Order_MaterialModel order = new Order_MaterialModel { ID_Client = Convert.ToInt32(User.FindFirst("ID").Value), Date_Order = Today, ID_Stat = 1 };
             db.Order_Material.Add(order);
-            if(db.Order_Material.IsNullOrEmpty())
-            {
-                a = 1;
-            }
-            else 
-            {
-                a = db.Order_Material.OrderBy(u => u.ID_Order).Last().ID_Order + 1;
-            }
-            
+            await db.SaveChangesAsync();
+
+            a = db.Order_Material.OrderBy(u => u.ID_Order).Last().ID_Order;
+
             foreach (int item in IsChoosen)
             {
-                db.Material_Nabor.Add(new Material_NaborModel { ID_Material = item, ID_Order = a, Kol_vo = kolvo[item-1] });
+                db.Material_Nabor.Add(new Material_NaborModel { ID_Material = item, ID_Order = a, Kol_vo = kolvo[item - 1] });
             }
             await db.SaveChangesAsync();
             return RedirectToAction("CorzinaMaterial", "Home");
@@ -188,25 +152,24 @@ namespace BDshka.Controllers
             userDB.FIO = user.FIO;
             userDB.ID_Role = user.ID_Role;
 
-            //db.Clients.Update(user);
             await db.SaveChangesAsync();
             return RedirectToAction("Index", "Home");
         }
 
-        
+
 
         private async Task Authenticate(ClientsModel Client)
         {
-            // создаем один claim
+
             var claims = new List<Claim>
             {
                 new Claim(ClaimsIdentity.DefaultNameClaimType, Client.Log_in),
                 new Claim(ClaimsIdentity.DefaultRoleClaimType, Client.ID_Role.ToString()),
                 new Claim("ID", Client.ID_Client.ToString()),
             };
-            // создаем объект ClaimsIdentity
+
             ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
-            // установка аутентификационных куки
+
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
         }
 

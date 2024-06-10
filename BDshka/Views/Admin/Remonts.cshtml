@@ -2,6 +2,8 @@
 
 <h2>Список пользователей</h2>
 <p><a asp-action="AddRemont" asp-controller="admin">Добавить услугу</a></p>
+<p><a asp-action="Index" asp-controller="Admin">В меню</a></p>
+
 <table class="table">
     <tr><th>ID</th><th>Название</th><th>Стоимость</th><th>Специальность</th></tr>
     @foreach (var item in Model)
