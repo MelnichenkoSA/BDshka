@@ -43,26 +43,40 @@ namespace BDshka.Controllers
             return View();
         }
         [HttpPost]
-        [HttpDelete]
-        public async Task<IActionResult> Delete(DeleteModel model)
+        public async Task<IActionResult> Delete(int? id)
         {
-            db.Clients.Remove(model.Client);
-            await db.SaveChangesAsync();
-            return RedirectToAction("Index","Admin");
+            if (id != null)
+            {
+                ClientsModel? user = await db.Clients.FirstOrDefaultAsync(p => p.ID_Client == id);
+                if (user != null)
+                {
+                    db.Clients.Remove(user);
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("Index", "Admin");
+                }
+            }
+            return NotFound();
+        }
+        [HttpPost]
+        public async Task<IActionResult> DeleteRemont(int? id)
+        {
+            if (id != null)
+            {
+                Order_RemontModel? user = await db.Order_Remont.FirstOrDefaultAsync(p => p.ID_Client == id);
+                if (user != null)
+                {
+                    db.Order_Remont.Remove(user);
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("CorzinaRemont", "Home");
+                }
+            }
+            return NotFound();
         }
         [HttpPost]
         [HttpDelete]
-        public async Task<IActionResult> DeleteRemont(Order_RemontModel model)
+        public async Task<IActionResult> DeleteOrder(Order_MaterialModel model)
         {
-            db.Order_Remont.Remove(model);
-            await db.SaveChangesAsync();
-            return RedirectToAction("CorzinaRemont", "Home");
-        }
-        [HttpPost]
-        [HttpDelete]
-        public async Task<IActionResult> DeleteOrder(Order_RemontModel model)
-        {
-            db.Order_Remont.Remove(model);
+            db.Order_Material.Remove(model);
             await db.SaveChangesAsync();
             return RedirectToAction("CorzinaMaterial", "Home");
         }

@@ -1,3 +1,4 @@
+
 namespace TestProject1
 {
     public class AccountTest
@@ -5,7 +6,7 @@ namespace TestProject1
         [Fact]
         public void AutorizationTest()
         {
-
+            AccountController q;
         }
         [Fact]
         public void RegistrationTest()

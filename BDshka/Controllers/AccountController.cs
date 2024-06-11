@@ -67,13 +67,15 @@ namespace BDshka.Controllers
 
             if (ModelState.IsValid && !db.Find(model.Log_in))
             {
-                ClientsModel sec = await db.Clients.FirstOrDefaultAsync(u => u.ID_Client == model.ID_Client && u.Log_in == model.Log_in && u.Pass_word == model.Pass_word && u.FIO == model.FIO && u.Phone_Number == model.Phone_Number && u.ID_Role == model.ID_Role);
+                ClientsModel sec = await db.Clients.FirstOrDefaultAsync(u => u.Log_in == model.Log_in && u.Pass_word == model.Pass_word && u.FIO == model.FIO && u.Phone_Number == model.Phone_Number && u.ID_Role == model.ID_Role);
                 if (sec == null)
                 {
-                    db.Clients.Add(new ClientsModel { ID_Client = model.ID_Client, FIO = model.FIO, Phone_Number = model.Phone_Number, ID_Role = 1, Pass_word = model.Pass_word, Log_in = model.Log_in });
+                    db.Clients.Add(new ClientsModel { FIO = model.FIO, Phone_Number = model.Phone_Number, ID_Role = 1, Pass_word = model.Pass_word, Log_in = model.Log_in });
                     await db.SaveChangesAsync();
 
-                    await Authenticate(model);
+                    var a = db.Clients.OrderBy(u => u.ID_Client).First().ID_Client;
+
+                    await Authenticate(db.Clients.OrderBy(u => u.ID_Client).Last());
 
                     return RedirectToAction("Index", "Home");
                 }
@@ -108,7 +110,7 @@ namespace BDshka.Controllers
             {
                 db.Order_Remont.Add(new Order_RemontModel { ID_Remont = id, ID_Client = Convert.ToInt32(User.FindFirst("ID").Value), Date_Order = Today, ID_Stat = 1 });
                 await db.SaveChangesAsync();
-                return RedirectToAction("Corzina", "Home");
+                return RedirectToAction("CorzinaRemont", "Home");
 
             }
             return NotFound();
