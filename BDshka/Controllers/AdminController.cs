@@ -11,6 +11,7 @@ namespace BDshka.Controllers
     public class AdminController : Controller
     {
         private BDContext db;
+
         public AdminController(BDContext context)
         {
             db = context;
