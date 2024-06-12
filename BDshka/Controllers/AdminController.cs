@@ -149,21 +149,6 @@ namespace BDshka.Controllers
             return View(model);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id != null)
-            {
-                ClientsModel? user = await db.Clients.FirstOrDefaultAsync(p => p.ID_Client == id);
-                if (user != null)
-                {
-                    db.Clients.Remove(user);
-                    await db.SaveChangesAsync();
-                    return RedirectToAction("Index", "Admin");
-                }
-            }
-            return NotFound();
-        }
         [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {

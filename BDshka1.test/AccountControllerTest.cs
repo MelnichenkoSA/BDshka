@@ -21,16 +21,7 @@ namespace BDshka1.test
         {
             AccountController accountc = new AccountController(_context);
         }
-        [Fact]
-        public void Null_DeleteClientTest()
-        {
-            AccountController accountc = new AccountController(_context);
-        }
-        [Fact]
-        public void DeleteClientTest()
-        {
-            AccountController accountc = new AccountController(_context);
-        }
+
         [Fact]
         public void EditClientTest()
         {
